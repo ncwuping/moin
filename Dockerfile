@@ -2,7 +2,8 @@ FROM centos:7
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
-RUN mkdir -p /docker-entrypoint-initdb.d \
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+ && mkdir -p /docker-entrypoint-initdb.d \
  && ln -s usr/local/bin/docker-entrypoint.sh /
 ENTRYPOINT ["docker-entrypoint.sh"]
 
