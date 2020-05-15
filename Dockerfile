@@ -7,9 +7,9 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
  && ln -s usr/local/bin/docker-entrypoint.sh /
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-RUN yum -y clean all \
+RUN yum -y install epel-release \
+ && yum -y clean all \
  && yum makecache fast \
- && yum -y install epel-release \
  && yum -y update; \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
  && python get-pip.py --no-wheel \
@@ -24,4 +24,4 @@ EXPOSE 8000
 
 STOPSIGNAL SIGTERM
 
-CMD ["/usr/bin/python", "/usr/bin/gunicorn", "--config", "/etc/gunicorn.py", "--chdir", "/usr/share/moin", "moin_wsgi:application;"]
+CMD ["/usr/bin/python", "/usr/bin/gunicorn", "--config", "/etc/gunicorn.py", "--chdir", "/usr/share/moin", "moin_wsgi:application"]
