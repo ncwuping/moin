@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 {
   echo "# -*- coding: utf-8 -*-"
   echo ""
@@ -40,7 +42,10 @@ fi
 
 if [ "$( ls -A data )" = "" ]; then
   mv -f data.template/* data/
-  rmdir data.template
+fi
+
+if [ -d "/usr/share/moin/data.template" ]; then
+  rm -rf /usr/share/moin/data.template
 fi
 
 exec "$@"
