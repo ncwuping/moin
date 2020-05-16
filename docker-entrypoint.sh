@@ -11,7 +11,9 @@ set -e
   echo ""
   echo "import multiprocessing"
   echo "bind = '0.0.0.0:${PORT:-8000}'"
-  echo "workers = multiprocessing.cpu_count() * 2 + 1"
+  if [ "${MULTI_PROC}" = "Y" ]; then
+    echo "workers = multiprocessing.cpu_count() * 2 + 1"
+  fi
   echo "worker_class = 'gevent'"
   echo ""
   echo "user = '${USER:-root}'"
@@ -34,6 +36,11 @@ if [ ! "${TITLE}" = "" ]; then
   sed -i 's!Untitled Wiki!'"${TITLE}"'!' -i wikiconfig.py
 fi
 sed -i '/#superuser/a\    superuser = [u\"admin\", ]' wikiconfig.py
+sed -i '/#acl_rights_before/a\    acl_rights_before = u\"admin:read,write,delete,revert,admin+AdminGroup:admin\"' wikiconfig.py
+if [ ! "${LANG_DEF}" = "" ]; then
+  sed -E 's!^(\s*language_default = '"'"')en'"'"'!\1'"${LANG_DEF}'"'!' -i wikiconfig.py
+fi
+sed -i '$a\    tz_offset = 8.0' wikiconfig.py
 sed -i '$a\    log_reverse_dns_lookups = False' wikiconfig.py
 
 if [ ! -d "/usr/share/moin/data" ]; then
