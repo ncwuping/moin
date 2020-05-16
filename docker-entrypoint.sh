@@ -28,7 +28,7 @@ cd /usr/share/moin
 cp -a server/moin.wsgi moin_wsgi.py
 cp -a config/wikiconfig.py ./
 sed -E 's!^(\s*)(url_prefix_static = '"'"'/mywiki'"'"' \+ url_prefix_static)!\1#\2!' -i wikiconfig.py
-if [ -n ${TITLE} ]; then
+if [ ! "${TITLE}" = "" ]; then
   sed -i 's!Untitled Wiki!'"${TITLE}"'!' -i wikiconfig.py
 fi
 sed -i '/#superuser/a\    superuser = [u\"admin\", ]' wikiconfig.py
@@ -39,7 +39,7 @@ if [ ! -d "/usr/share/moin/data" ]; then
 fi
 
 if [ "$( ls -A data )" = "" ]; then
-  mf -f data.template/* data/
+  mv -f data.template/* data/
   rmdir data.template
 fi
 
