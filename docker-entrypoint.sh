@@ -2,10 +2,6 @@
 
 set -e
 
-echo 'Asia/Shanghai' > /etc/timezone && \
-mv -f /etc/localtime /etc/localtime.UTC && \
-ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
 {
   echo "# -*- coding: utf-8 -*-"
   echo ""
