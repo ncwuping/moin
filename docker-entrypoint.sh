@@ -2,6 +2,10 @@
 
 set -e
 
+echo 'Asia/Shanghai' > /etc/timezone && \
+mv -f /etc/localtime /etc/localtime.UTC && \
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
 {
   echo "# -*- coding: utf-8 -*-"
   echo ""
@@ -36,6 +40,9 @@ if [ ! "${TITLE}" = "" ]; then
   sed -i 's!Untitled Wiki!'"${TITLE}"'!' -i wikiconfig.py
 fi
 sed -i '/#superuser/a\    superuser = [u\"admin\", ]' wikiconfig.py
+if [ "${NEW_ACCT}" = "Y" ]; then
+  sed -E 's!^(\s*)#(actions_superuser)(.*)!\1\2\3!' -i wikiconfig.py
+fi
 sed -i '/#acl_rights_before/a\    acl_rights_before = u\"admin:read,write,delete,revert,admin+AdminGroup:admin\"' wikiconfig.py
 if [ ! "${LANG_DEF}" = "" ]; then
   sed -E 's!^(\s*language_default = '"'"')en'"'"'!\1'"${LANG_DEF}'"'!' -i wikiconfig.py
